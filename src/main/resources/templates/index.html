@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodFrenzy - Sizzling Gourmet Food Delivered Fresh & Fast</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Alerts -->
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">
+                        <i class="bi bi-stars me-1 text-danger"></i> PREMIUM ARTISAN CRAFTED
+                    </span>
+                    <h1 class="hero-title mb-4">
+                        Craving Delicious Food? <span class="hero-highlight">Satisfy The Frenzy!</span>
+                    </h1>
+                    <p class="hero-subtitle mb-4">
+                        Handcrafted gourmet burgers, wood-fired artisan pizzas, steaming Asian noodle bowls, and indulgent Belgian desserts made fresh with local farm ingredients.
+                    </p>
+
+                    <!-- Search Bar in Hero -->
+                    <form th:action="@{/menu}" method="get" class="mb-4">
+                        <div class="input-group shadow-md p-1 bg-white rounded-pill border">
+                            <span class="input-group-text bg-transparent border-0 ps-3">
+                                <i class="bi bi-search text-muted fs-5"></i>
+                            </span>
+                            <input type="text" name="keyword" class="form-control border-0 shadow-none ps-2"
+                                   placeholder="Search for Truffle Burgers, Ramen, Margherita Pizza...">
+                            <button class="btn btn-primary-custom rounded-pill px-4" type="submit">
+                                Find Food
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Stats / Highlights -->
+                    <div class="d-flex align-items-center gap-4 text-dark pt-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-lightning-charge-fill text-warning fs-3"></i>
+                            <div>
+                                <span class="fw-bold d-block lh-1">30 Mins</span>
+                                <small class="text-muted">Average Delivery</small>
+                            </div>
+                        </div>
+                        <div class="vr"></div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check text-success fs-3"></i>
+                            <div>
+                                <span class="fw-bold d-block lh-1">100% Fresh</span>
+                                <small class="text-muted">Quality Guarantee</small>
+                            </div>
+                        </div>
+                        <div class="vr"></div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-star-fill text-warning fs-3"></i>
+                            <div>
+                                <span class="fw-bold d-block lh-1">4.9 / 5</span>
+                                <small class="text-muted">Customer Rating</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="hero-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&auto=format&fit=crop&q=80"
+                             alt="Gourmet Dishes" class="hero-img">
+                        <div class="hero-badge-pill">
+                            <div class="bg-success text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                                <i class="bi bi-bicycle fs-4"></i>
+                            </div>
+                            <div>
+                                <span class="fw-bold d-block text-dark lh-1">Free Delivery</span>
+                                <small class="text-muted">On all orders above $50</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="text-uppercase text-danger fw-bold small tracking-wider">Explore By Taste</span>
+                    <h2 class="fw-bold text-dark mb-0">Browse Cuisines</h2>
+                </div>
+                <a th:href="@{/menu}" class="fw-semibold text-decoration-none">
+                    View Full Menu <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+                <div class="col" th:each="category : ${categories}">
+                    <a th:href="@{/menu(category=${category.id})}" class="category-card">
+                        <div class="category-card-icon">
+                            <i class="bi" th:classappend="${category.iconClass}"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" th:text="${category.name}">Category Name</h6>
+                        <small class="text-muted" th:text="${category.products != null ? category.products.size() + ' Dishes' : 'Chef Specials'}">Dishes</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotional Banner -->
+    <section class="py-2">
+        <div class="container">
+            <div class="p-4 p-md-5 rounded-4 text-white shadow-md position-relative overflow-hidden"
+                 style="background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);">
+                <div class="row align-items-center position-relative z-1">
+                    <div class="col-lg-8">
+                        <span class="badge bg-white text-danger fw-bold px-3 py-2 rounded-pill mb-2">WEEKEND CRAZE</span>
+                        <h3 class="fw-800 display-6 mb-2">Save 20% On All Artisanal Pizzas & Smash Burgers!</h3>
+                        <p class="mb-0 text-white-50">Handcrafted dough rested for 48 hours. Fresh farm toppings baked in 800° stone ovens.</p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                        <a th:href="@{/menu}" class="btn btn-light rounded-pill px-4 py-3 fw-bold text-dark shadow-sm">
+                            <i class="bi bi-bag-heart-fill text-danger me-2"></i> Order Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Food Products Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <span class="text-uppercase text-danger fw-bold small">Chef's Signature Selections</span>
+                    <h2 class="fw-bold text-dark mb-0">Popular & Featured Dishes</h2>
+                </div>
+                <a th:href="@{/menu}" class="btn btn-outline-primary-custom btn-sm">
+                    View All Dishes
+                </a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                <div class="col" th:each="product : ${featuredProducts}">
+                    <div class="product-card">
+                        <div class="product-img-wrap">
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}" class="product-img"
+                                 th:classappend="${product.outOfStock ? 'product-img-overlay-disabled' : ''}">
+                            <div class="position-absolute top-0 start-0 m-2 d-flex flex-column gap-1">
+                                <span class="badge badge-category" th:text="${product.category.name}">Category</span>
+                                <span th:if="${product.vegetarian}" class="badge badge-veg">
+                                    <i class="bi bi-circle-fill" style="font-size: 8px;"></i> VEG
+                                </span>
+                            </div>
+                            <span th:if="${product.outOfStock}" class="badge-out-of-stock">Sold Out</span>
+                        </div>
+                        <div class="product-card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <a th:href="@{/products/{id}(id=${product.id})}" class="product-title text-decoration-none">
+                                    <span th:text="${product.name}">Product Name</span>
+                                </a>
+                            </div>
+                            <p class="product-desc" th:text="${product.description}">Delicious ingredients and rich flavours.</p>
+
+                            <div class="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
+                                <span class="product-price" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">$12.99</span>
+
+                                <!-- Add to Cart Button -->
+                                <form th:if="${!product.outOfStock}" th:action="@{/cart/items}" method="post" class="m-0">
+                                    <input type="hidden" name="productId" th:value="${product.id}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-primary-custom btn-sm rounded-pill px-3">
+                                        <i class="bi bi-plus-lg me-1"></i> Add
+                                    </button>
+                                </form>
+                                <button th:if="${product.outOfStock}" class="btn btn-secondary btn-sm rounded-pill px-3 disabled" disabled>
+                                    Unavailable
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose FoodFrenzy Section -->
+    <section class="py-5 bg-white border-top border-bottom">
+        <div class="container">
+            <div class="text-center max-w-xl mx-auto mb-5">
+                <span class="text-uppercase text-danger fw-bold small">Why Us</span>
+                <h2 class="fw-bold">The FoodFrenzy Standard</h2>
+                <p class="text-muted">We combine restaurant-quality culinary expertise with smart modern ordering.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4 text-center p-4">
+                    <div class="bg-danger-subtle text-danger rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-fire fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Fresh From The Pan</h5>
+                    <p class="text-muted small">Every order is cooked on demand by experienced kitchen artisans using fresh, non-frozen produce.</p>
+                </div>
+                <div class="col-md-4 text-center p-4">
+                    <div class="bg-warning-subtle text-warning rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-stopwatch-fill fs-2 text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Express Hot Delivery</h5>
+                    <p class="text-muted small">Insulated thermal delivery packs guarantee your burgers stay crisp and your ramen stays piping hot.</p>
+                </div>
+                <div class="col-md-4 text-center p-4">
+                    <div class="bg-success-subtle text-success rounded-circle d-inline-flex p-3 mb-3">
+                        <i class="bi bi-wallet2 fs-2 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Cash on Delivery & Trust</h5>
+                    <p class="text-muted small">Convenient pay-on-arrival with Cash on Delivery or contactless order receipt verification.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Testimonials -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-uppercase text-danger fw-bold small">Customer Praise</span>
+                <h2 class="fw-bold">Loved By Food Lovers Everywhere</h2>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+                        <div class="d-flex text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">
+                            "The Truffle Bacon Smash Burger blew my mind! Crisp edges, juicy center, and the bun was perfectly toasted. Arrived in just 22 minutes!"
+                        </p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="bg-primary text-white rounded-circle fw-bold d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                MC
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Marcus Cole</h6>
+                                <small class="text-muted">Food Blogger</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+                        <div class="d-flex text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">
+                            "The Margherita pizza crust had the authentic blistered wood-fire texture. Fresh basil and genuine mozzarella. FoodFrenzy is my new weekend ritual."
+                        </p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="bg-danger text-white rounded-circle fw-bold d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                EL
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Elena Rossi</h6>
+                                <small class="text-muted">Verified Customer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+                        <div class="d-flex text-warning mb-3">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="text-secondary small fst-italic mb-4">
+                            "Smooth checkout, accurate order timeline, and the Molten Lava Cake was still warm with molten chocolate running out. 10/10 experience!"
+                        </p>
+                        <div class="d-flex align-items-center gap-3 mt-auto">
+                            <div class="bg-success text-white rounded-circle fw-bold d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                DJ
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">David Jenkins</h6>
+                                <small class="text-muted">Verified Customer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

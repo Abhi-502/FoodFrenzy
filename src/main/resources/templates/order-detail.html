@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Order #' + order.orderNumber + ' - FoodFrenzy'}">Order Details - FoodFrenzy</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Alerts -->
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<main class="py-5">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/my-orders}">My Orders</a></li>
+                <li class="breadcrumb-item active text-dark fw-bold" aria-current="page" th:text="${'#' + order.orderNumber}">#Order</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold mb-1">
+                    Order <span class="text-danger" th:text="${'#' + order.orderNumber}">#FF-123</span>
+                </h1>
+                <p class="text-muted mb-0">
+                    Placed on <span th:text="${#temporals.format(order.createdAt, 'MMMM dd, yyyy at HH:mm')}">Date</span>
+                </p>
+            </div>
+            <a th:href="@{/my-orders}" class="btn btn-outline-secondary rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i> Back to Orders
+            </a>
+        </div>
+
+        <!-- Order Status Tracker Card (Unless Cancelled) -->
+        <div th:if="${order.orderStatus.name() != 'CANCELLED'}" class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+            <h5 class="fw-bold mb-4 text-center">Live Order Journey</h5>
+            <div class="order-timeline">
+                <!-- 1. Placed -->
+                <div class="timeline-step" th:classappend="${order.orderStatus.name() == 'PLACED' ? 'active' : 'completed'}">
+                    <div class="step-icon"><i class="bi bi-receipt"></i></div>
+                    <div class="timeline-label">Placed</div>
+                </div>
+
+                <!-- 2. Confirmed -->
+                <div class="timeline-step" th:classappend="${order.orderStatus.name() == 'CONFIRMED' ? 'active' : (order.orderStatus.ordinal() > 1 ? 'completed' : '')}">
+                    <div class="step-icon"><i class="bi bi-check2-circle"></i></div>
+                    <div class="timeline-label">Confirmed</div>
+                </div>
+
+                <!-- 3. Preparing -->
+                <div class="timeline-step" th:classappend="${order.orderStatus.name() == 'PREPARING' ? 'active' : (order.orderStatus.ordinal() > 2 ? 'completed' : '')}">
+                    <div class="step-icon"><i class="bi bi-fire"></i></div>
+                    <div class="timeline-label">Preparing</div>
+                </div>
+
+                <!-- 4. Out For Delivery -->
+                <div class="timeline-step" th:classappend="${order.orderStatus.name() == 'OUT_FOR_DELIVERY' ? 'active' : (order.orderStatus.ordinal() > 3 ? 'completed' : '')}">
+                    <div class="step-icon"><i class="bi bi-bicycle"></i></div>
+                    <div class="timeline-label">On The Way</div>
+                </div>
+
+                <!-- 5. Delivered -->
+                <div class="timeline-step" th:classappend="${order.orderStatus.name() == 'DELIVERED' ? 'active completed' : ''}">
+                    <div class="step-icon"><i class="bi bi-house-door"></i></div>
+                    <div class="timeline-label">Delivered</div>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <span class="badge bg-light text-dark border px-3 py-2 fs-6">
+                    Current Status: <strong class="text-danger" th:text="${order.orderStatus.displayName}">Status</strong>
+                </span>
+                <p class="text-muted small mt-2 mb-0" th:text="${order.orderStatus.description}">Status description</p>
+            </div>
+        </div>
+
+        <!-- Cancelled Notice Card -->
+        <div th:if="${order.orderStatus.name() == 'CANCELLED'}" class="alert alert-danger rounded-4 p-4 shadow-sm mb-4">
+            <h5 class="fw-bold mb-1"><i class="bi bi-x-circle-fill me-2"></i> This Order Was Cancelled</h5>
+            <p class="mb-0 small" th:text="${order.cancellationReason != null ? order.cancellationReason : 'No reason provided.'}">Reason</p>
+        </div>
+
+        <!-- Order Information & Breakdown -->
+        <div class="row g-4">
+            <!-- Items Card -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
+                    <div class="p-3 bg-light border-bottom fw-bold text-dark">
+                        Purchased Food Dishes
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="bg-light text-muted small">
+                                    <tr>
+                                        <th class="ps-4">Item</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th class="pe-4 text-end">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${order.items}">
+                                        <td class="ps-4 py-3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <img th:if="${item.productImageUrl}" th:src="${item.productImageUrl}" class="rounded-3 shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <span class="fw-bold text-dark" th:text="${item.productName}">Dish</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${'$' + #numbers.formatDecimal(item.price, 1, 2)}">$0.00</td>
+                                        <td class="fw-bold" th:text="${item.quantity}">1</td>
+                                        <td class="pe-4 text-end fw-bold text-danger" th:text="${'$' + #numbers.formatDecimal(item.subtotal, 1, 2)}">$0.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancel Order Modal/Form -->
+                <div th:if="${order.canBeCancelled()}" class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                    <h6 class="fw-bold text-danger mb-2">Need to Cancel this Order?</h6>
+                    <p class="text-muted small mb-3">You can cancel your order while it is still in the "Placed" or "Confirmed" state. Restocking is handled automatically.</p>
+                    <form th:action="@{/my-orders/{id}/cancel(id=${order.id})}" method="post">
+                        <div class="mb-3">
+                            <input type="text" name="reason" class="form-control form-control-sm"
+                                   placeholder="Reason for cancellation (optional)">
+                        </div>
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                data-confirm="Are you sure you want to cancel this order?">
+                            <i class="bi bi-x-octagon me-1"></i> Cancel Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Summary & Details Card -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+                    <h6 class="fw-bold mb-3 border-bottom pb-2">Delivery Details</h6>
+                    <small class="text-muted d-block">Recipient</small>
+                    <span class="fw-bold text-dark d-block mb-2" th:text="${order.recipientName}">Name</span>
+
+                    <small class="text-muted d-block">Contact Phone</small>
+                    <span class="fw-semibold text-dark d-block mb-2" th:text="${order.recipientPhone}">Phone</span>
+
+                    <small class="text-muted d-block">Address</small>
+                    <span class="text-secondary small d-block mb-3" th:text="${order.deliveryAddress}">Address</span>
+
+                    <div th:if="${order.specialInstructions}" class="p-2 bg-light rounded-3 small text-muted mb-3">
+                        <strong>Notes:</strong> <span th:text="${order.specialInstructions}">Instructions</span>
+                    </div>
+
+                    <h6 class="fw-bold mb-3 border-bottom pb-2">Payment Details</h6>
+                    <div class="d-flex justify-content-between mb-1 small text-muted">
+                        <span>Method:</span>
+                        <span class="fw-bold text-dark" th:text="${order.paymentMethod.displayName}">COD</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 small text-muted">
+                        <span>Payment Status:</span>
+                        <span class="badge bg-light text-dark border" th:text="${order.paymentStatus.displayName}">Pending</span>
+                    </div>
+
+                    <hr class="my-2">
+
+                    <div class="d-flex justify-content-between mb-1 small text-muted">
+                        <span>Subtotal:</span>
+                        <span class="fw-semibold text-dark" th:text="${'$' + #numbers.formatDecimal(order.subtotal, 1, 2)}">$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 small text-muted">
+                        <span>Tax (8%):</span>
+                        <span class="fw-semibold text-dark" th:text="${'$' + #numbers.formatDecimal(order.taxAmount, 1, 2)}">$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 small text-muted">
+                        <span>Delivery Fee:</span>
+                        <span class="fw-semibold text-dark" th:text="${order.deliveryFee.doubleValue() == 0 ? 'FREE' : '$' + #numbers.formatDecimal(order.deliveryFee, 1, 2)}">$0.00</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2 border-top">
+                        <span class="fw-bold text-dark fs-6">Grand Total:</span>
+                        <span class="fs-5 fw-800 text-danger" th:text="${'$' + #numbers.formatDecimal(order.totalAmount, 1, 2)}">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

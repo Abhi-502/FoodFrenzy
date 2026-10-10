@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="footer-custom">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <!-- Brand & Mission -->
+            <div class="col-lg-4 col-md-6">
+                <a class="brand-logo text-white mb-3 d-inline-block" th:href="@{/}">
+                    <i class="bi bi-fire text-warning"></i> FoodFrenzy
+                </a>
+                <p class="text-secondary small pe-lg-4">
+                    FoodFrenzy delivers sizzling-hot, chef-crafted dishes right to your doorstep. Experience restaurant-grade gourmet meals with lightning-fast delivery and real-time order tracking.
+                </p>
+                <div class="d-flex gap-3 text-secondary fs-5 mt-3">
+                    <a href="#" class="text-secondary hover-primary"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-secondary hover-primary"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-secondary hover-primary"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="text-secondary hover-primary"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6">
+                <h6 class="text-white fw-bold mb-3">Quick Navigation</h6>
+                <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
+                    <li><a th:href="@{/}" class="text-secondary">Home</a></li>
+                    <li><a th:href="@{/menu}" class="text-secondary">Explore Menu</a></li>
+                    <li><a th:href="@{/cart}" class="text-secondary">Shopping Cart</a></li>
+                    <li><a th:href="@{/my-orders}" class="text-secondary">Track Orders</a></li>
+                    <li><a th:href="@{/login}" class="text-secondary">Sign In / Register</a></li>
+                </ul>
+            </div>
+
+            <!-- Food Categories -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="text-white fw-bold mb-3">Popular Cuisines</h6>
+                <ul class="list-unstyled small d-flex flex-column gap-2 mb-0">
+                    <li><a th:href="@{/menu?category=1}" class="text-secondary">Gourmet Burgers</a></li>
+                    <li><a th:href="@{/menu?category=2}" class="text-secondary">Artisan Wood-Fired Pizzas</a></li>
+                    <li><a th:href="@{/menu?category=3}" class="text-secondary">Asian Bowls & Ramen</a></li>
+                    <li><a th:href="@{/menu?category=4}" class="text-secondary">Artisan Wraps & Paninis</a></li>
+                    <li><a th:href="@{/menu?category=5}" class="text-secondary">Shakes & Belgian Desserts</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact & Hours -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="text-white fw-bold mb-3">Store & Support</h6>
+                <ul class="list-unstyled small d-flex flex-column gap-2 text-secondary mb-0">
+                    <li><i class="bi bi-geo-alt me-2 text-warning"></i> 100 Gourmet Way, Suite 400</li>
+                    <li><i class="bi bi-telephone me-2 text-warning"></i> +1 (800) 555-FOOD</li>
+                    <li><i class="bi bi-envelope me-2 text-warning"></i> support@foodfrenzy.com</li>
+                    <li><i class="bi bi-clock me-2 text-warning"></i> Open Daily: 10:00 AM - 11:30 PM</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="border-secondary my-4">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="small text-secondary mb-0">
+                    &copy; 2026 FoodFrenzy Inc. Built with Spring Boot 3 & Thymeleaf. All rights reserved.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                <span class="badge bg-dark border border-secondary text-secondary me-2">Cash on Delivery</span>
+                <span class="badge bg-dark border border-secondary text-secondary me-2">Instant Kitchen Prep</span>
+                <span class="badge bg-dark border border-secondary text-secondary">Fresh & Hygenic</span>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

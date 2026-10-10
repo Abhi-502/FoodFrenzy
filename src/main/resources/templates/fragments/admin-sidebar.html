@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar(activeTab)" class="admin-sidebar p-3 d-flex flex-column justify-content-between">
+    <div>
+        <!-- Brand Header -->
+        <div class="px-3 py-2 mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-fire fs-3 text-warning"></i>
+            <div>
+                <span class="fs-5 fw-bold text-white d-block lh-1">FoodFrenzy</span>
+                <span class="text-secondary small fw-medium" style="font-size: 0.72rem;">ADMIN CONSOLE</span>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="nav flex-column gap-1">
+            <a th:href="@{/admin/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a th:href="@{/admin/orders}" class="nav-link" th:classappend="${activeTab == 'orders' ? 'active' : ''}">
+                <i class="bi bi-bag-check"></i> Orders
+            </a>
+            <a th:href="@{/admin/products}" class="nav-link" th:classappend="${activeTab == 'products' ? 'active' : ''}">
+                <i class="bi bi-egg-fried"></i> Food Products
+            </a>
+            <a th:href="@{/admin/inventory}" class="nav-link" th:classappend="${activeTab == 'inventory' ? 'active' : ''}">
+                <i class="bi bi-boxes"></i> Inventory
+            </a>
+            <a th:href="@{/admin/customers}" class="nav-link" th:classappend="${activeTab == 'customers' ? 'active' : ''}">
+                <i class="bi bi-people"></i> Customers
+            </a>
+        </nav>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="pt-3 border-top border-secondary">
+        <a th:href="@{/}" class="nav-link text-warning mb-2">
+            <i class="bi bi-arrow-left-circle"></i> Customer Website
+        </a>
+        <form th:action="@{/logout}" method="post" class="m-0">
+            <button type="submit" class="btn btn-outline-danger w-100 btn-sm text-start ps-3 py-2">
+                <i class="bi bi-box-arrow-right me-2"></i> Log Out
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - FoodFrenzy</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Alerts -->
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<main class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+                    <div class="text-center mb-4">
+                        <div class="brand-logo fs-2 justify-content-center mb-2">
+                            <i class="bi bi-fire text-warning"></i> FoodFrenzy
+                        </div>
+                        <h4 class="fw-bold text-dark">Join the FoodFrenzy Club</h4>
+                        <p class="text-muted small">Create an account to start ordering delicious gourmet meals.</p>
+                    </div>
+
+                    <!-- Registration Form -->
+                    <form th:action="@{/register}" th:object="${user}" method="post">
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold small">Full Name</label>
+                            <input type="text" id="name" th:field="*{name}"
+                                   class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                   placeholder="e.g. Alex Johnson" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+
+                        <!-- Email & Phone -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-semibold small">Email Address</label>
+                                <input type="email" id="email" th:field="*{email}"
+                                       class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       placeholder="alex@example.com" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label fw-semibold small">Phone Number</label>
+                                <input type="text" id="phone" th:field="*{phone}"
+                                       class="form-control" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                       placeholder="+1 (555) 0123" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                            </div>
+                        </div>
+
+                        <!-- Password & Confirm Password -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-semibold small">Password</label>
+                                <input type="password" id="password" th:field="*{password}"
+                                       class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                       placeholder="Minimum 6 characters" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="confirmPassword" class="form-label fw-semibold small">Confirm Password</label>
+                                <input type="password" id="confirmPassword" th:field="*{confirmPassword}"
+                                       class="form-control" th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+                                       placeholder="Re-enter password" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-4">
+                            <label for="address" class="form-label fw-semibold small">Delivery Address</label>
+                            <textarea id="address" th:field="*{address}" rows="2"
+                                      class="form-control" th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                      placeholder="Street address, apartment or suite number, city, postal code" required></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom w-100 py-2 fw-bold mb-3">
+                            Register & Get Started
+                        </button>
+                    </form>
+
+                    <div class="text-center pt-3 border-top">
+                        <p class="small text-muted mb-0">
+                            Already registered?
+                            <a th:href="@{/login}" class="fw-bold text-danger">Sign In Here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
